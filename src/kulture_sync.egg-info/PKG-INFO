@@ -1,0 +1,18 @@
+Metadata-Version: 2.4
+Name: kulture-sync
+Version: 0.1.0
+Summary: Taskmaster Agent: Background Music Curation and Data-Safe Caching for South African Users
+License: Apache-2.0
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: google-adk>=2.0.0
+Requires-Dist: google-cloud-firestore>=2.11.0
+Requires-Dist: google-genai>=0.1.0
+Requires-Dist: pandas>=2.0.0
+Requires-Dist: pydantic>=2.0.0
+Requires-Dist: fastapi>=0.100.0
+Requires-Dist: uvicorn>=0.22.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0.0; extra == "dev"
+Requires-Dist: black>=23.0.0; extra == "dev"
+Requires-Dist: ruff>=0.1.0; extra == "dev"

@@ -1,0 +1,11 @@
+track_id,title,artist,genre,is_local,popularity
+T001,Sgudi Snyc,De Mthuda,Amapiano,True,0.85
+T002,Imali,Phuzekhemisi,Maskandi,True,0.40
+T003,Bula Boot,Vetro,Lekompo,True,0.30
+T004,Gqom Wave,DJ Lag,Gqom,True,0.75
+T005,Tshwara,Muzi,Electronic,True,0.55
+T006,Future Free,Frank Ocean,R&B,False,0.90
+T007,As It Was,Harry Styles,Pop,False,0.95
+T008,Yano Grooves,Kabza De Small,Amapiano,True,0.88
+T009,Motswako Heights,Khuli Chana,Motswako,True,0.65
+T010,Bacardi Dance,Mujava,Bacardi,True,0.50
