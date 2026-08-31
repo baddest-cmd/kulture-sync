@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.DS_Store
+/tmp/kulture_sync_*.json

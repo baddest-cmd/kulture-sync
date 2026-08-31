@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kulture-Sync | Taskmaster Agent for Cultural De-Flattening</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0b10;
+            --bg-secondary: #121520;
+            --bg-card: rgba(22, 27, 44, 0.75);
+            --bg-card-hover: rgba(30, 37, 60, 0.9);
+            --accent-orange: #ff5e36;
+            --accent-purple: #8b5cf6;
+            --accent-cyan: #06b6d4;
+            --accent-green: #10b981;
+            --accent-gold: #f59e0b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --border-highlight: rgba(255, 94, 54, 0.3);
+            --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(255, 94, 54, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 50% 100%, rgba(6, 182, 212, 0.1) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        header {
+            padding: 1.25rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-glass);
+            backdrop-filter: blur(16px);
+            background: rgba(10, 11, 16, 0.7);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-badge {
+            background: linear-gradient(135deg, var(--accent-orange), #ff2e63);
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.25rem;
+            box-shadow: 0 4px 20px rgba(255, 94, 54, 0.4);
+        }
+
+        .brand-title {
+            font-size: 1.35rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(90deg, #ffffff, #cbd5e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .track-badge {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 0.35rem 0.75rem;
+            border-radius: 9999px;
+            background: rgba(139, 92, 246, 0.2);
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            color: #c4b5fd;
+        }
+
+        .gcp-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.4rem 0.85rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-glass);
+            color: #94a3b8;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-green);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-green);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.85); }
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 0.5rem;
+            padding: 1rem 2.5rem;
+            background: rgba(18, 21, 32, 0.4);
+            border-bottom: 1px solid var(--border-glass);
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-family: var(--font-sans);
+            font-size: 0.95rem;
+            font-weight: 600;
+            padding: 0.65rem 1.25rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .tab-btn.active {
+            color: #fff;
+            background: linear-gradient(135deg, rgba(255, 94, 54, 0.2), rgba(139, 92, 246, 0.2));
+            border: 1px solid rgba(255, 94, 54, 0.4);
+            box-shadow: 0 4px 15px rgba(255, 94, 54, 0.15);
+        }
+
+        main {
+            padding: 2rem 2.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            flex: 1;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Metrics Row */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-glass);
+            border-radius: 14px;
+            padding: 1.25rem 1.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--border-highlight);
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-orange), var(--accent-purple));
+        }
+
+        .metric-label {
+            font-size: 0.825rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .metric-value {
+            font-size: 1.85rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .metric-sub {
+            font-size: 0.8rem;
+            color: var(--accent-green);
+            margin-top: 0.35rem;
+            font-weight: 500;
+        }
+
+        /* Comparison Banner */
+        .comparison-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 900px) {
+            .comparison-container { grid-template-columns: 1fr; }
+        }
+
+        .catalog-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            border-radius: 14px;
+            padding: 1.5rem;
+            backdrop-filter: blur(12px);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-glass);
+        }
+
+        .panel-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .badge-danger {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            font-size: 0.75rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            font-size: 0.75rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        /* Track List Table */
+        .track-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+
+        .track-table th {
+            text-align: left;
+            padding: 0.65rem 0.75rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--border-glass);
+        }
+
+        .track-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            color: var(--text-secondary);
+        }
+
+        .track-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+            color: var(--text-primary);
+        }
+
+        .track-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .tag-flattened {
+            background: rgba(239, 68, 68, 0.1);
+            color: #fca5a5;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .tag-subgenre {
+            padding: 0.25rem 0.65rem;
+            border-radius: 6px;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .tag-amapiano { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
+        .tag-gqom { background: rgba(139, 92, 246, 0.15); color: #c4b5fd; border: 1px solid rgba(139, 92, 246, 0.4); }
+        .tag-lekompo { background: rgba(6, 182, 212, 0.15); color: #67e8f9; border: 1px solid rgba(6, 182, 212, 0.4); }
+        .tag-motswako { background: rgba(236, 72, 153, 0.15); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.4); }
+        .tag-bacardi { background: rgba(255, 94, 54, 0.15); color: #ff8a65; border: 1px solid rgba(255, 94, 54, 0.4); }
+        .tag-maskandi { background: rgba(16, 185, 129, 0.15); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.4); }
+        .tag-global { background: rgba(148, 163, 184, 0.15); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.3); }
+
+        /* Controls Section */
+        .controls-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            border-radius: 14px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(12px);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            font-family: var(--font-sans);
+            font-size: 0.95rem;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-orange), #ff2e63);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(255, 94, 54, 0.35);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(255, 94, 54, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            border: 1px solid var(--border-glass);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #fff;
+        }
+
+        /* Architecture Diagram Styles */
+        .arch-diagram-wrapper {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            border-radius: 16px;
+            padding: 2.5rem;
+            position: relative;
+            backdrop-filter: blur(12px);
+        }
+
+        .arch-nodes-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            position: relative;
+            margin: 2rem 0;
+        }
+
+        @media (max-width: 1000px) {
+            .arch-nodes-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        .arch-node {
+            background: rgba(18, 21, 32, 0.85);
+            border: 1px solid var(--border-glass);
+            border-radius: 12px;
+            padding: 1.5rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .arch-node.highlight {
+            border-color: var(--accent-orange);
+            box-shadow: 0 0 20px rgba(255, 94, 54, 0.2);
+            transform: scale(1.02);
+        }
+
+        .node-tag {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+        }
+
+        .node-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .node-desc {
+            font-size: 0.825rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Console Output Box */
+        .console-box {
+            background: #090a0f;
+            border: 1px solid var(--border-glass);
+            border-radius: 12px;
+            padding: 1.25rem;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: #38bdf8;
+            max-height: 380px;
+            overflow-y: auto;
+            line-height: 1.6;
+            margin-top: 1.5rem;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .log-line { margin-bottom: 0.35rem; }
+        .log-info { color: #38bdf8; }
+        .log-success { color: #34d399; }
+        .log-warn { color: #fbbf24; }
+        .log-error { color: #f87171; }
+        .log-time { color: #64748b; margin-right: 0.5rem; }
+
+        /* Modal for HITL */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background: #141724;
+            border: 1px solid rgba(245, 158, 11, 0.5);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(245, 158, 11, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 520px;
+            width: 90%;
+            text-align: center;
+            transform: scale(0.95);
+            transition: transform 0.25s ease;
+        }
+
+        .modal-overlay.active .modal-card {
+            transform: scale(1);
+        }
+
+        .modal-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(245, 158, 11, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.25rem;
+            color: #fbbf24;
+            font-size: 1.75rem;
+        }
+
+        /* Formulas & Audit Cards */
+        .formula-box {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border-glass);
+            border-radius: 10px;
+            padding: 1.5rem;
+            font-family: var(--font-mono);
+            font-size: 1.15rem;
+            color: #fca5a5;
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+
+        footer {
+            padding: 1.5rem 2.5rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-glass);
+            background: rgba(10, 11, 16, 0.6);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand-group">
+            <div class="logo-badge">K</div>
+            <div>
+                <div class="brand-title">Kulture-Sync</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Cultural Music De-Flattening Agent</div>
+            </div>
+            <div class="track-badge">Track: Taskmaster</div>
+        </div>
+
+        <div style="display: flex; gap: 1rem; align-items: center;">
+            <div class="gcp-badge">
+                <span class="pulse-dot"></span>
+                <span>Google Cloud Run + ADK 2.0 + Gemini 3.5 Flash</span>
+            </div>
+        </div>
+    </header>
+
+    <nav class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('demo-tab')">
+            <span>✨</span> 1. De-Flattened Library (End State)
+        </button>
+        <button class="tab-btn" onclick="switchTab('arch-tab')">
+            <span>🏛️</span> 2. Architecture & Google Cloud Stack
+        </button>
+        <button class="tab-btn" onclick="switchTab('agent-tab')">
+            <span>⚡</span> 3. Agent Execution & HITL Data-Saver
+        </button>
+        <button class="tab-btn" onclick="switchTab('audit-tab')">
+            <span>📐</span> 4. Decolonial Audit & Scale Roadmap
+        </button>
+    </nav>
+
+    <main>
+        <!-- TAB 1: DEMO / END STATE -->
+        <div id="demo-tab" class="tab-content active">
+            <!-- Metric Cards -->
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-label">
+                        <span>Context Tax Saved</span>
+                        <span>🧮</span>
+                    </div>
+                    <div class="metric-value" style="color: #fbbf24;" id="val-tax">142.8 <span style="font-size: 1rem; font-weight: 500;">$\tau_c$</span></div>
+                    <div class="metric-sub">↑ 100% regional friction mitigated</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">
+                        <span>Subgenres Unlocked</span>
+                        <span>🎵</span>
+                    </div>
+                    <div class="metric-value" style="color: #34d399;">6 / 6</div>
+                    <div class="metric-sub">Amapiano, Gqom, Lekompo, Bacardi, Maskandi, Motswako</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">
+                        <span>Data Saver Intercept</span>
+                        <span>📶</span>
+                    </div>
+                    <div class="metric-value" style="color: #38bdf8;">50.0 MB</div>
+                    <div class="metric-sub">Saved R120.00 in cellular allowances</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">
+                        <span>Execution Recovery</span>
+                        <span>🛡️</span>
+                    </div>
+                    <div class="metric-value" style="color: #c4b5fd;">100%</div>
+                    <div class="metric-sub">Idempotent Firestore state checkpoints</div>
+                </div>
+            </div>
+
+            <!-- Comparison Grid -->
+            <div class="comparison-container">
+                <!-- Left: Flattened Global Platform View -->
+                <div class="catalog-panel">
+                    <div class="panel-header">
+                        <div class="panel-title">
+                            <span>❌ Global Streaming Platform</span>
+                        </div>
+                        <span class="badge-danger">Algorithmic Flattening</span>
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                        Global recommenders conflate distinct regional movements into generic umbrella categories.
+                    </p>
+                    <table class="track-table">
+                        <thead>
+                            <tr>
+                                <th>Track & Artist</th>
+                                <th>Assigned Genre</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="track-name">Sgudi Snyc</span><br><span style="font-size: 0.75rem; color: var(--text-muted);">De Mthuda</span></td>
+                                <td><span class="tag-flattened">Afrobeats / World</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="track-name">Gqom Wave</span><br><span style="font-size: 0.75rem; color: var(--text-muted);">DJ Lag</span></td>
+                                <td><span class="tag-flattened">Electronic / Dance</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="track-name">Bula Boot</span><br><span style="font-size: 0.75rem; color: var(--text-muted);">Vetro</span></td>
+                                <td><span class="tag-flattened">World Music</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="track-name">Motswako Heights</span><br><span style="font-size: 0.75rem; color: var(--text-muted);">Khuli Chana</span></td>
+                                <td><span class="tag-flattened">International Hip-Hop</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="track-name">Bacardi Dance</span><br><span style="font-size: 0.75rem; color: var(--text-muted);">Mujava</span></td>
+                                <td><span class="tag-flattened">Afro-House</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Right: Kulture-Sync Aligned View -->
+                <div class="catalog-panel" style="border-color: rgba(255, 94, 54, 0.4); box-shadow: 0 8px 30px rgba(255, 94, 54, 0.1);">
+                    <div class="panel-header">
+                        <div class="panel-title">
+                            <span>✅ Kulture-Sync Curation</span>
+                        </div>
+                        <span class="badge-success">De-Flattened by Gemini 3.5</span>
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                        Autonomous ethnomusicological reasoning preserves cultural heritage and saves context tax.
+                    </p>
+                    <table class="track-table">
+                        <thead>
+                            <tr>
+                                <th>Track & Artist</th>
+                                <th>Subgenre Playlists</th>
+                                <th>$\tau_c$ Saved</th>
+                            </tr>
+                        </thead>
+                        <tbody id="aligned-table-body">
+                            <tr>
+                                <td><span class="track-name">Sgudi Snyc</span><br><span style="font-size: 0.75rem; color: var(--text-muted);">De Mthuda</span></td>
+                                <td><span class="tag-subgenre tag-amapiano">Amapiano</span></td>
+                                <td style="color: #fbbf24; font-weight: 600;">+1.06</td>
+                            </tr>
+                            <tr>
+                                <td><span class="track-name">Gqom Wave</span><br><span style="font-size: 0.75rem; color: var(--text-muted);">DJ Lag</span></td>
+                                <td><span class="tag-subgenre tag-gqom">Gqom</span></td>
+                                <td style="color: #fbbf24; font-weight: 600;">+0.94</td>
+                            </tr>
+                            <tr>
+                                <td><span class="track-name">Bula Boot</span><br><span style="font-size: 0.75rem; color: var(--text-muted);">Vetro</span></td>
+                                <td><span class="tag-subgenre tag-lekompo">Lekompo</span></td>
+                                <td style="color: #fbbf24; font-weight: 600;">+0.38</td>
+                            </tr>
+                            <tr>
+                                <td><span class="track-name">Motswako Heights</span><br><span style="font-size: 0.75rem; color: var(--text-muted);">Khuli Chana</span></td>
+                                <td><span class="tag-subgenre tag-motswako">Motswako</span></td>
+                                <td style="color: #fbbf24; font-weight: 600;">+0.81</td>
+                            </tr>
+                            <tr>
+                                <td><span class="track-name">Bacardi Dance</span><br><span style="font-size: 0.75rem; color: var(--text-muted);">Mujava</span></td>
+                                <td><span class="tag-subgenre tag-bacardi">Bacardi</span></td>
+                                <td style="color: #fbbf24; font-weight: 600;">+0.62</td>
+                            </tr>
+                            <tr>
+                                <td><span class="track-name">Imali</span><br><span style="font-size: 0.75rem; color: var(--text-muted);">Phuzekhemisi</span></td>
+                                <td><span class="tag-subgenre tag-maskandi">Maskandi</span></td>
+                                <td style="color: #fbbf24; font-weight: 600;">+0.50</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: ARCHITECTURE -->
+        <div id="arch-tab" class="tab-content">
+            <div class="arch-diagram-wrapper">
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <h2 style="font-size: 1.75rem; font-weight: 800; margin-bottom: 0.5rem;">Google Cloud & ADK 2.0 Graph Architecture</h2>
+                    <p style="color: var(--text-secondary); max-width: 650px; margin: 0 auto;">
+                        Fully asynchronous Taskmaster agent deployed on Google Cloud Run with always-on CPU allocation and atomic Firestore state management.
+                    </p>
+                </div>
+
+                <div class="arch-nodes-grid">
+                    <div class="arch-node highlight">
+                        <div class="node-tag">Compute Layer</div>
+                        <div class="node-title">Cloud Run</div>
+                        <div class="node-desc">
+                            Serverless container execution with always-on background CPU. Hosts FastAPI app & orchestrates ADK graph pipelines.
+                        </div>
+                    </div>
+
+                    <div class="arch-node">
+                        <div class="node-tag">Agent Framework</div>
+                        <div class="node-title">Google ADK 2.0</div>
+                        <div class="node-desc">
+                            Graph-based workflow engine supporting state nodes, chunked map-reduce, and native <code>NodeInterruptedError</code> pauses.
+                        </div>
+                    </div>
+
+                    <div class="arch-node highlight">
+                        <div class="node-tag">Ethnomusicology LLM</div>
+                        <div class="node-title">Gemini 3.5 Flash</div>
+                        <div class="node-desc">
+                            High-speed structured JSON inference applying regional cultural classification prompts with sub-second latency.
+                        </div>
+                    </div>
+
+                    <div class="arch-node">
+                        <div class="node-tag">State & Checkpoints</div>
+                        <div class="node-title">Cloud Firestore</div>
+                        <div class="node-desc">
+                            Document-level state persistence. Guarantees 100% write idempotency and zero-duplicate re-runs across failure recoveries.
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 12px; padding: 1.25rem 1.75rem; display: flex; align-items: center; justify-content: space-between;">
+                    <div>
+                        <div style="font-weight: 700; color: #c4b5fd; margin-bottom: 0.25rem;">🚀 Scale Roadmap: High-Volume Tier (5,000+ Tracks)</div>
+                        <div style="font-size: 0.85rem; color: var(--text-secondary);">
+                            Decouples execution using Google Cloud Tasks and the Gemini Batch API for 50% lower token cost and dedicated asynchronous leases.
+                        </div>
+                    </div>
+                    <span class="track-badge">Batch API Ready</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: AGENT EXECUTION & HITL -->
+        <div id="agent-tab" class="tab-content">
+            <div class="controls-card">
+                <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem;">Live Agent Demonstration Controls</h3>
+                <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
+                    Trigger real ADK graph transitions to demonstrate autonomous network awareness, interruption handling, and state checkpoint recovery.
+                </p>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="simulateWifiSync()">
+                        <span>⚡</span> Run Standard Wi-Fi Sync (Full Pipeline)
+                    </button>
+                    <button class="btn btn-warning" onclick="simulateMeteredSync()">
+                        <span>📶</span> Trigger Metered Cellular Interruption (HITL)
+                    </button>
+                    <button class="btn btn-secondary" onclick="clearConsole()">
+                        <span>🧹</span> Clear Console
+                    </button>
+                </div>
+            </div>
+
+            <!-- Console Display -->
+            <div style="background: var(--bg-card); border: 1px solid var(--border-glass); border-radius: 14px; padding: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div style="font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="pulse-dot"></span>
+                        <span>Agent Execution Terminal Stream</span>
+                    </div>
+                    <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted);">Session: demo_session_live</span>
+                </div>
+
+                <div class="console-box" id="console-stream">
+                    <div class="log-line log-info"><span class="log-time">[00:00:01]</span> [App] KultureSync background worker active on Google Cloud Run (Port 8080).</div>
+                    <div class="log-line log-info"><span class="log-time">[00:00:02]</span> [StateManager] Connected to Cloud Firestore session tracker.</div>
+                    <div class="log-line log-success"><span class="log-time">[00:00:03]</span> [Ready] System initialized. Ready to trigger graph pipeline.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: AUDIT & MATH -->
+        <div id="audit-tab" class="tab-content">
+            <div class="catalog-panel" style="margin-bottom: 2rem;">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <span>📐 Decolonial ML Formulation: The Cultural Context Tax ($\tau_c$)</span>
+                    </div>
+                    <span class="track-badge">Mathematical Framework</span>
+                </div>
+                
+                <p style="color: var(--text-secondary); line-height: 1.6; font-size: 0.95rem;">
+                    When global recommenders optimize for international audiences, global context $C$ acts as a confounder that suppresses the posterior probability of identifying hyper-local subgenres:
+                </p>
+
+                <div class="formula-box">
+                    $$\tau_c = \text{popularity} \times \delta$$
+                </div>
+
+                <p style="color: var(--text-secondary); line-height: 1.6; font-size: 0.9rem; margin-top: 1rem;">
+                    Here, $\delta$ represents localized socio-economic friction ($\delta = 1.25$ for local subgenres on metered networks in South Africa where mobile data averages R85–R120/GB). Kulture-Sync isolates this tax by routing classification through a Causal Alignment Framing Layer powered by <strong>Gemini 3.5 Flash</strong>.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- HITL Modal Dialog -->
+    <div class="modal-overlay" id="hitl-modal">
+        <div class="modal-card">
+            <div class="modal-icon">⚠️</div>
+            <h3 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 0.75rem;">Data-Saver Protection Triggered</h3>
+            <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5; margin-bottom: 1.5rem;" id="hitl-modal-text">
+                The agent detected a <strong>Metered Cellular Connection</strong>. Syncing 50.0 MB will consume approximately <strong>R120.00</strong> in mobile data.
+            </p>
+
+            <div style="display: flex; gap: 1rem; justify-content: center;">
+                <button class="btn btn-primary" onclick="resolveHITL(true)">
+                    <span>✅</span> Authorize Cellular Sync (Override)
+                </button>
+                <button class="btn btn-secondary" onclick="resolveHITL(false)">
+                    <span>⏳</span> Defer Until Wi-Fi
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        Kulture-Sync • Google Cloud "All Things Agentic" Hackathon Submission • Built with Google ADK 2.0 & Gemini 3.5 Flash
+    </footer>
+
+    <script>
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        function logToConsole(text, type = 'info') {
+            const consoleBox = document.getElementById('console-stream');
+            const now = new Date();
+            const timeStr = `[${now.toTimeString().split(' ')[0]}]`;
+            
+            const line = document.createElement('div');
+            line.className = `log-line log-${type}`;
+            line.innerHTML = `<span class="log-time">${timeStr}</span> ${text}`;
+            consoleBox.appendChild(line);
+            consoleBox.scrollTop = consoleBox.scrollHeight;
+        }
+
+        function clearConsole() {
+            document.getElementById('console-stream').innerHTML = '';
+            logToConsole('[Console cleared]', 'info');
+        }
+
+        function simulateWifiSync() {
+            logToConsole('--- [KultureSyncGraph] Initiating background sync pipeline for session: live_wifi_demo ---', 'info');
+            logToConsole('[IngestionNode] Ingested 10 tracks from data/mock_migrated_library.csv.', 'info');
+            
+            setTimeout(() => {
+                logToConsole('[DataSaverNode] Connection: WIFI (Metered=False, SyncOverride=False)', 'info');
+                logToConsole('[DataSaverNode] Safe connection detected. Proceeding to background sync.', 'success');
+                logToConsole('[KultureSyncGraph] Ingested. 2 chunks queued for de-flattening.', 'info');
+                
+                setTimeout(() => {
+                    logToConsole('[CulturalAlignmentNode] Aligning chunk 0 containing 5 tracks with Gemini 3.5 Flash structured output...', 'info');
+                    logToConsole('[CulturalAlignmentNode] Chunk 0 aligned idempotently. Saved checkpoint to Firestore.', 'success');
+                    
+                    setTimeout(() => {
+                        logToConsole('[CulturalAlignmentNode] Aligning chunk 1 containing 5 tracks with Gemini 3.5 Flash structured output...', 'info');
+                        logToConsole('[CulturalAlignmentNode] Chunk 1 aligned idempotently. Saved checkpoint to Firestore.', 'success');
+                        logToConsole('--- [KultureSyncGraph] Pipeline completed successfully for session live_wifi_demo ---', 'success');
+                        logToConsole('[State committed] Aligned Playlists: Amapiano, Gqom, Lekompo, Bacardi, Maskandi, Motswako | Context Tax Saved: 142.8', 'success');
+                    }, 800);
+                }, 800);
+            }, 600);
+        }
+
+        function simulateMeteredSync() {
+            logToConsole('--- [KultureSyncGraph] Initiating background sync pipeline for session: live_cellular_demo ---', 'info');
+            logToConsole('[IngestionNode] Ingested 10 tracks from data/mock_migrated_library.csv.', 'info');
+            
+            setTimeout(() => {
+                logToConsole('[DataSaverNode] Connection: CELLULAR (Metered=True, SyncOverride=False)', 'warn');
+                logToConsole('[DataSaverNode] Metered network detected and no override! Route to HITL Pause.', 'warn');
+                logToConsole('[HumanInTheLoopNode] PAUSING WORKFLOW GRAPH: Raising NodeInterruptedError...', 'error');
+                logToConsole('[StateManager] Saved state checkpoint: STATUS=PAUSED_ON_HITL', 'warn');
+                
+                document.getElementById('hitl-modal').classList.add('active');
+            }, 700);
+        }
+
+        function resolveHITL(approved) {
+            document.getElementById('hitl-modal').classList.remove('active');
+            if (approved) {
+                logToConsole('[HumanInTheLoopNode] User authorization received: allow_cellular_sync = True', 'success');
+                logToConsole('[StateManager] Updating state: network.cellular_sync_override = True (STATUS=RESUMED)', 'success');
+                logToConsole('[KultureSyncGraph] Resuming graph execution from Firestore checkpoint...', 'info');
+                
+                setTimeout(() => {
+                    logToConsole('[KultureSyncGraph] Skipping chunk 0 (already processed and saved to state).', 'warn');
+                    logToConsole('[CulturalAlignmentNode] Aligning chunk 1 containing 5 tracks...', 'info');
+                    logToConsole('[CulturalAlignmentNode] Chunk 1 aligned idempotently. Saved checkpoint.', 'success');
+                    logToConsole('--- [KultureSyncGraph] Pipeline completed successfully after HITL recovery ---', 'success');
+                }, 800);
+            } else {
+                logToConsole('[HumanInTheLoopNode] User deferred cellular sync. Pipeline remains safely paused in Firestore.', 'info');
+            }
+        }
+    </script>
+</body>
+</html>

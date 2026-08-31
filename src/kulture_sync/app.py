@@ -39,8 +39,17 @@ def run_graph_background(
     except Exception as e:
         print(f"[App] Background pipeline failed: {e}")
 
+from fastapi.responses import FileResponse
+
 @app.get("/")
 def read_root():
+    static_file = os.path.join(os.path.dirname(__file__), "static", "index.html")
+    if os.path.exists(static_file):
+        return FileResponse(static_file)
+    return {"status": "ACTIVE", "agent": "KultureSync Taskmaster Background Agent"}
+
+@app.get("/api/status")
+def get_api_status():
     return {"status": "ACTIVE", "agent": "KultureSync Taskmaster Background Agent"}
 
 @app.get("/session/{session_id}")
